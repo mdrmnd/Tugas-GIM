@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon.png-ba6141472526d020e72ec2b18a7f49b1.stex"
+path="res://.import/kokomix.png-eedbabcd944a7be8858df8f7e6313a87.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/icon.png"
-dest_files=[ "res://.import/icon.png-ba6141472526d020e72ec2b18a7f49b1.stex" ]
+source_file="res://src/Assets/kokomix.png"
+dest_files=[ "res://.import/kokomix.png-eedbabcd944a7be8858df8f7e6313a87.stex" ]
 
 [params]
 
