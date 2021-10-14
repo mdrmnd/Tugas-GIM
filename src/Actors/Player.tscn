@@ -105,7 +105,7 @@ position = Vector2( -632, -432 )
 scale = Vector2( 1.33333, 1.2619 )
 frames = SubResource( 2 )
 animation = "ledge_climbing"
-frame = 6
+frame = 3
 playing = true
 
 [node name="Camera2D" type="Camera2D" parent="."]

@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://src/Actors/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Assets/Itch Package/Tilemap/Tilemap 4x no bg.png" type="Texture" id=2]
+[ext_resource path="res://src/Actors/Enemy.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/Assets/icon.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -277,10 +278,13 @@ position = Vector2( 725.345, 388.473 )
 scale = Vector2( 0.996659, 0.994674 )
 
 [node name="AnimatedSprite" parent="Player" index="1"]
-frame = 8
+frame = 4
 
 [node name="Camera2D" parent="Player" index="2"]
 limit_left = 0
 limit_top = 0
+
+[node name="Enemy" parent="." instance=ExtResource( 3 )]
+position = Vector2( 941.345, 532.473 )
 
 [editable path="Player"]

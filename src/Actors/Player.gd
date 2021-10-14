@@ -30,19 +30,19 @@ func _physics_process(delta: float) -> void:
 
 # Ambil arah dari vektor berdasarkan input
 func get_direction() -> Vector2:
+	# Arah kanan (+1) dikurangi arah kiri (-1), jadi kalo dipencet bareng bisa 0
+	var x = Input.get_action_strength("Right") - Input.get_action_strength("Left")
 	var y = 0
 	if Input.get_action_strength("Up")>0:
 		if is_on_wall():
-			y = -0.3
+			if (_animated_sprite.flip_h and x>0) or (not _animated_sprite.flip_h and x<0):
+				y = -1.0
 		elif is_on_floor():
 			y = -1.0
 	else:
 		y = 0.0
-	return Vector2(
-		# Arah kanan (+1) dikurangi arah kiri (-1), jadi kalo dipencet bareng bisa 0
-		Input.get_action_strength("Right") - Input.get_action_strength("Left"),
-		y
-	)
+	return Vector2(x, y)
+	
 	
 func play_animation(linear_velocity: Vector2) -> void:
 	if linear_velocity.x>0:
