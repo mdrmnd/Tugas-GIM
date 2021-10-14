@@ -33,7 +33,9 @@ func _physics_process(delta: float) -> void:
 			toggle_crouch(true)
 		else:
 			velocity.y = speed.y
-	elif Input.is_action_just_released("Down"):
+	elif Input.is_action_just_released("Down") and not is_on_ceiling():
+		toggle_crouch(false)
+	elif crouching and not is_on_ceiling():
 		toggle_crouch(false)
 		
 	play_animation(velocity)

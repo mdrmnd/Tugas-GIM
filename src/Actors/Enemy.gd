@@ -1,16 +1,23 @@
 extends Actor
 
-
-# Declare member variables here. Examples:
-# var a: int = 2
-# var b: String = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	set_physics_process(false)
+	velocity.x = -speed.x*0.3
+	_animated_sprite.flip_h = true
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta: float) -> void:
-#	pass
+func _on_StompDetector_body_entered(body: Node) -> void:
+	if body.global_position.y > get_node("StompDetector").global_position.y:
+		return
+	get_node("CollisionShape2D").disabled = true
+	queue_free()
+	
+	
+func _physics_process(delta: float) -> void:
+	velocity.y += gravity*delta
+	if is_on_wall():
+		velocity.x *= -1.0
+		_animated_sprite.flip_h = false
+	velocity.y = move_and_slide(velocity, Vector2.UP).y
+
+
