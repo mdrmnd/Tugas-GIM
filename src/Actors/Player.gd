@@ -13,6 +13,8 @@ func _physics_process(delta: float) -> void:
 	if is_on_wall():
 		velocity.y = 0
 	elif not is_on_floor():
+		if is_on_ceiling():
+			velocity.y = 0
 		velocity.y += gravity * delta
 	
 	if direction.y < 0:
