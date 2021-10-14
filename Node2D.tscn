@@ -277,7 +277,7 @@ position = Vector2( 725.345, 388.473 )
 scale = Vector2( 0.996659, 0.994674 )
 
 [node name="AnimatedSprite" parent="Player" index="1"]
-frame = 3
+frame = 6
 
 [node name="Camera2D" parent="Player" index="2"]
 limit_left = 0

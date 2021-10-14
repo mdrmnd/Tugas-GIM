@@ -1,49 +1,28 @@
 extends Actor
 
-"""
-func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("Jump"):
-		_animated_sprite.play("jump_rise")
-	elif velocity.y<0:
-		_animated_sprite.play("jump_mid")
-	elif velocity.y>0:
-		_animated_sprite.play("jump_fall")
-	if Input.is_action_pressed("Right"):
-		_animated_sprite.flip_h = false
-		if is_on_floor():
-			_animated_sprite.play("run")
-	elif Input.is_action_pressed("Left"):
-		_animated_sprite.flip_h = true
-		if is_on_floor():
-			_animated_sprite.play("run")
-	elif Input.is_action_just_released("Right"):
-		_animated_sprite.flip_h = false
-		_animated_sprite.play("idle_transition")
-	elif Input.is_action_just_released("Left"):
-		_animated_sprite.flip_h = true
-		_animated_sprite.play("idle_transition")
-	elif is_on_floor():
-		_animated_sprite.play("idle")
-"""
+
 func _physics_process(delta: float) -> void:
 	var direction := get_direction()
 	# Cek apakah player melepas tombol jump dan player sedang di udara
-	var is_jump_interrupted := Input.is_action_just_released("Jump") and velocity.y<0
+	var is_jump_interrupted := Input.is_action_just_released("Up") and velocity.y<0
 	
 	if direction.x==0:
 		velocity.x = lerp(velocity.x, 0, 0.1)
 	else:
 		velocity.x = lerp(velocity.x, speed.x * direction.x, 1.0)
-	velocity.y += gravity * delta
+	if is_on_wall():
+		velocity.y = 0
+	else:
+		velocity.y += gravity * delta
 	
-	if direction.y == -1.0:
+	if direction.y < 0:
 		velocity.y = speed.y * direction.y
 	if is_jump_interrupted:
 		# Kecepatan oleh lompatan langsung 0 dan selanjutnya dipengaruhi gravitasi saja jika kondisi terpenuhi
 		# Supaya tinggi lompatan ditentukan oleh lamanya player memberi input "Jump"
 		velocity.y = 0.0
-	if Input.is_action_pressed("Plunge"):
-		velocity.y = 750
+	if Input.is_action_pressed("Down"):
+		velocity.y = speed.y
 		
 	play_animation(velocity)
 	move_and_slide(velocity, Vector2.UP)
@@ -51,11 +30,18 @@ func _physics_process(delta: float) -> void:
 
 # Ambil arah dari vektor berdasarkan input
 func get_direction() -> Vector2:
+	var y = 0
+	if Input.get_action_strength("Up")>0:
+		if is_on_wall():
+			y = -0.3
+		elif is_on_floor():
+			y = -1.0
+	else:
+		y = 0.0
 	return Vector2(
 		# Arah kanan (+1) dikurangi arah kiri (-1), jadi kalo dipencet bareng bisa 0
 		Input.get_action_strength("Right") - Input.get_action_strength("Left"),
-		# Arah atas (-1), kalau tidak sedang lompat maka arah bawah (+1)
-		-1.0 if Input.is_action_just_pressed("Jump") and is_on_floor() else 0.0
+		y
 	)
 	
 func play_animation(linear_velocity: Vector2) -> void:
@@ -71,8 +57,13 @@ func play_animation(linear_velocity: Vector2) -> void:
 				_animated_sprite.play("run")
 		else:
 			_animated_sprite.play("idle")
+	elif is_on_wall():
+		if linear_velocity.y<0:
+			_animated_sprite.play("ledge_climbing")
+		else:
+			_animated_sprite.play("ledge_hang")
 	else:
-		if Input.is_action_pressed("Jump"):
+		if Input.is_action_pressed("Up"):
 			_animated_sprite.play("jump_rise")
 		elif velocity.y<=0:
 			_animated_sprite.play("jump_mid")
