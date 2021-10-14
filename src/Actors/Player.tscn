@@ -132,12 +132,12 @@ collision_mask = 6
 script = ExtResource( 3 )
 
 [node name="NormalCollision" type="CollisionShape2D" parent="."]
-position = Vector2( -633.372, -403.504 )
+position = Vector2( -632, -400.158 )
 scale = Vector2( 0.977147, 1.3823 )
 shape = SubResource( 1 )
 
 [node name="CrouchCollision" type="CollisionShape2D" parent="."]
-position = Vector2( -633.372, -392 )
+position = Vector2( -632, -392.154 )
 scale = Vector2( 1.008, 0.89 )
 shape = SubResource( 1 )
 disabled = true
@@ -147,7 +147,6 @@ position = Vector2( -632, -432 )
 scale = Vector2( 1.33333, 1.2619 )
 frames = SubResource( 2 )
 animation = "crouch"
-frame = 1
 playing = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -169,6 +168,9 @@ collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="NormalDetector"]
 modulate = Color( 1, 0, 0, 1 )
-position = Vector2( 6.10352e-05, 1.87289 )
-scale = Vector2( 1.269, 2.743 )
+position = Vector2( 1.54885, 3.34647 )
+scale = Vector2( 1.2912, 2.9145 )
 shape = SubResource( 3 )
+
+[connection signal="area_entered" from="NormalDetector" to="." method="_on_NormalDetector_area_entered"]
+[connection signal="body_entered" from="NormalDetector" to="." method="_on_NormalDetector_body_entered"]

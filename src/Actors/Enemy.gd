@@ -17,7 +17,10 @@ func _physics_process(delta: float) -> void:
 	velocity.y += gravity*delta
 	if is_on_wall():
 		velocity.x *= -1.0
+	if velocity.x>0:
 		_animated_sprite.flip_h = false
+	else:
+		_animated_sprite.flip_h = true
 	velocity.y = move_and_slide(velocity, Vector2.UP).y
 
 

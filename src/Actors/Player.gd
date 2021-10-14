@@ -5,6 +5,14 @@ var crouching := false
 onready var normCol := get_node("NormalCollision")
 onready var crouCol := get_node("CrouchCollision")
 
+func _on_NormalDetector_area_entered(area: Area2D) -> void:
+	velocity.y = -speed.y
+
+
+func _on_NormalDetector_body_entered(body: Node) -> void:
+	queue_free()
+	get_tree().reload_current_scene()
+
 
 func _physics_process(delta: float) -> void:
 	var direction := get_direction()
