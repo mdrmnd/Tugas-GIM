@@ -1,5 +1,10 @@
 extends Actor
 
+var crouching := false
+
+onready var normCol := get_node("NormalCollision")
+onready var crouCol := get_node("CrouchCollision")
+
 
 func _physics_process(delta: float) -> void:
 	var direction := get_direction()
@@ -9,7 +14,7 @@ func _physics_process(delta: float) -> void:
 	if direction.x==0:
 		velocity.x = lerp(velocity.x, 0, 0.1)
 	else:
-		velocity.x = lerp(velocity.x, speed.x * direction.x, 1.0)
+		velocity.x = lerp(velocity.x, (speed.x-int(crouching)*0.8*speed.x) * direction.x, 1.0)
 	if is_on_wall():
 		velocity.y = 0
 	elif not is_on_floor():
@@ -17,14 +22,19 @@ func _physics_process(delta: float) -> void:
 			velocity.y = 0
 		velocity.y += gravity * delta
 	
-	if direction.y < 0:
+	if direction.y != 0:
 		velocity.y = speed.y * direction.y
 	if is_jump_interrupted:
 		# Kecepatan oleh lompatan langsung 0 dan selanjutnya dipengaruhi gravitasi saja jika kondisi terpenuhi
 		# Supaya tinggi lompatan ditentukan oleh lamanya player memberi input "Jump"
 		velocity.y = 0.0
 	if Input.is_action_pressed("Down"):
-		velocity.y = speed.y
+		if is_on_floor():
+			toggle_crouch(true)
+		else:
+			velocity.y = speed.y
+	elif Input.is_action_just_released("Down"):
+		toggle_crouch(false)
 		
 	play_animation(velocity)
 	move_and_slide(velocity, Vector2.UP)
@@ -53,12 +63,17 @@ func play_animation(linear_velocity: Vector2) -> void:
 		_animated_sprite.flip_h = true
 	if is_on_floor():
 		if abs(linear_velocity.x)>50:
-			if Input.get_action_strength("Right")==0 and Input.get_action_strength("Left")==0:
+			if crouching:
+				_animated_sprite.play("crawl")
+			elif Input.get_action_strength("Right")==0 and Input.get_action_strength("Left")==0:
 				_animated_sprite.play("idle_transition")
 			else:
 				_animated_sprite.play("run")
 		else:
-			_animated_sprite.play("idle")
+			if crouching:
+				_animated_sprite.play("crouch")
+			else:
+				_animated_sprite.play("idle")
 	elif is_on_wall():
 		if linear_velocity.y<0:
 			_animated_sprite.play("ledge_climbing")
@@ -71,3 +86,13 @@ func play_animation(linear_velocity: Vector2) -> void:
 			_animated_sprite.play("jump_mid")
 		else:
 			_animated_sprite.play("jump_fall")
+
+func toggle_crouch(status: bool) -> void:
+	if not status:
+		crouching = false
+		normCol.disabled = false
+		crouCol.disabled = true
+	else:
+		crouching = true
+		normCol.disabled = true
+		crouCol.disabled = false
