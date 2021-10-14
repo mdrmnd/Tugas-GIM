@@ -105,14 +105,14 @@ position = Vector2( -632, -432 )
 scale = Vector2( 1.33333, 1.2619 )
 frames = SubResource( 2 )
 animation = "ledge_climbing"
-frame = 4
+frame = 6
 playing = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( -633.372, -464 )
 scale = Vector2( 0.536461, 0.294955 )
 current = true
-zoom = Vector2( 0.6, 0.6 )
+zoom = Vector2( 0.5, 0.5 )
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 smoothing_enabled = true

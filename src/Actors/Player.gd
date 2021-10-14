@@ -12,7 +12,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = lerp(velocity.x, speed.x * direction.x, 1.0)
 	if is_on_wall():
 		velocity.y = 0
-	else:
+	elif not is_on_floor():
 		velocity.y += gravity * delta
 	
 	if direction.y < 0:
